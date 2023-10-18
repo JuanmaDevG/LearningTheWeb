@@ -13,13 +13,13 @@ h1 {
 }
 
 .content-panel {
-    display: block;
     background-color: black;
     margin: auto;
     margin-top: 20px;
     width: 90%;
     height: 500px;
     border-radius: 50px;
+    overflow: hidden;
 }
 
 .common-button {
