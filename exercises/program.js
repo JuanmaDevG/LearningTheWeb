@@ -1,5 +1,11 @@
 let click_state = false;
 
+const person = {
+    firstName: "John",
+    secondName: "Doe",
+    fullName: function() { return this.firstName + " " + this.secondName; }
+}
+
 function surprise_button_click()
 {
     if(!click_state)
