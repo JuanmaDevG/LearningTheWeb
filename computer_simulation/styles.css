@@ -80,15 +80,17 @@ html, div {
     display: grid;
     width: 100%;
     height: 100%;
-    grid-template-rows: repeat(8, 1fr);
-    grid-auto-columns: auto;
+
+    /*Grid rows and columns are assigned by JS*/
+    grid-template-rows: repeat(9, 1fr);
+    grid-auto-columns: repeat(50, 1fr);
 }
 
 .ventilation-hole {
     background-color: black;
-    width: 50%;
-    height: 50%;
+    width: 80%;
+    height: 80%;
     margin: auto;
 
-    /* JS declares rows and columns */
+    /* Rows and columns declared by JS */
 }
