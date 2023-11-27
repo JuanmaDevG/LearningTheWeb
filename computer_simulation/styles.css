@@ -45,6 +45,18 @@ html, div {
     width: 50px;
     height: 50px;
     border-radius: 100%;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+#start-button:hover {
+    border-color: red;
+    color: red;
+}
+
+#start-button:active {
+    transition: border-color 0s, color 0s;
+    border-color: blue;
+    color: blue;
 }
 
 #disk-slot {
@@ -81,9 +93,7 @@ html, div {
     width: 100%;
     height: 100%;
 
-    /*Grid rows and columns are assigned by JS*/
-    grid-template-rows: repeat(9, 1fr);
-    grid-auto-columns: repeat(50, 1fr);
+    /*Grid template rows and columns assigned by JS*/
 }
 
 .ventilation-hole {
