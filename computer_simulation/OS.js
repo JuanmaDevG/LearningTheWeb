@@ -9,14 +9,17 @@ function start_computer()
 
     if(computer_is_running) //Shut down
     {
-        //TODO: clean framebuffer and stop everything
+        ctx.clearRect(0, 0, framebuffer.width, framebuffer.height);
+        //TODO: Free resources and stop processes if needed and add a GoodBye screen
         computer_is_running = false;
         return;
     }
     computer_is_running = true;
 
     ctx.fillStyle = "rgb(255, 0, 0)";
-    ctx.fillRect(10, 10, 200, 100);
+    ctx.fillRect(10, 10, 50, 50);
+    ctx.fillStyle = "rgba(0,0,255,0.5)";
+    ctx.fillRect(35, 35, 50, 50);
 }
 
 

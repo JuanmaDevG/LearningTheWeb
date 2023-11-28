@@ -26,9 +26,17 @@ html, div {
     border-radius: 10px;
 }
 
+/*
+    Note:
+    
+    Do never declare the canvas width and hoght attributes in the css file, 
+    that can cause errors because you're just modifying the screen output of 
+    the canvas object BUT NOT the canvas behaviour.
+
+    API objects MUST declare it's attributes inner HTML, NEVER stylesheets because 
+    produce lack of interaction the API and becomes just an styled object
+*/
 #computer-framebuffer {
-    width: 600px;
-    height: 600px;
     background-color: black;
     border-radius: 10px;
     margin-top: 100px;
