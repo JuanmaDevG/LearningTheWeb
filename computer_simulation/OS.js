@@ -16,10 +16,10 @@ function start_computer()
     }
     computer_is_running = true;
 
-    ctx.fillStyle = "rgb(255, 0, 0)";
-    ctx.fillRect(10, 10, 50, 50);
-    ctx.fillStyle = "rgba(0,0,255,0.5)";
-    ctx.fillRect(35, 35, 50, 50);
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "blue";
+
+    
 }
 
 
