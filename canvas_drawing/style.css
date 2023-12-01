@@ -3,3 +3,6 @@ html, body, div {
     padding: 0px;
 }
 
+.simulation-button {
+    border-radius: 10px;
+}
