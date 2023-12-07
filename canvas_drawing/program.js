@@ -33,6 +33,7 @@ function smile_face(framebuffer, ctx)
     ctx.fillRect(0, 0, framebuffer.width, framebuffer.height);
 }
 
+
 /*
     Building the drawing playground
 */
