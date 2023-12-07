@@ -46,7 +46,7 @@ const simulations = [
 
 addEventListener("DOMContentLoaded", () => {
     //Setting framebuffer
-    let framebuffer = document.getElementById("framebuffer");
+    const framebuffer = document.getElementById("framebuffer");
     framebuffer.width = window.innerWidth;
     framebuffer.height = window.innerHeight;
 
