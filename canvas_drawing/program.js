@@ -28,9 +28,25 @@ function red_triangle(framebuffer, ctx)
 function smile_face(framebuffer, ctx)
 {
     clean(framebuffer, ctx);
-    //TODO: draw the face
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, framebuffer.width, framebuffer.height);
+
+    circle = {
+        x: framebuffer.width / 2,
+        y: framebuffer.height / 2, 
+        radius: framebuffer.height / 4,  
+        start_angle: 0, 
+        fin_angle: 2 * Math.PI
+    };
+    ctx.beginPath();
+    ctx.arc(circle.x, circle.y, circle.radius, circle.start_angle, circle.fin_angle );
+    ctx.stroke();
+    ctx.closePath();
+    ctx.arc(circle.x - (circle.radius / 2), circle.y - (circle.radius / 2), circle.radius / 10, circle.start_angle, circle.fin_angle);
+    ctx.stroke();
+    ctx.closePath();
+    ctx.arc(circle.x + (circle.radius / 2), circle.y - (circle.radius / 2), circle.radius / 10, circle.start_angle, circle.fin_angle);
+    ctx.stroke();
+    ctx.closePath();
+    //TODO: solve the bug
 }
 
 
@@ -51,9 +67,9 @@ addEventListener("DOMContentLoaded", () => {
     framebuffer.height = window.innerHeight;
 
     //Configuring grid
-    const ROWS = 4;
+    const COLUMNS = 4;
     let btn_container = document.getElementById("simulation-button-container");
-    btn_container.style.gridTemplateColumns = `repeat(${ROWS}, 1fr)`;
+    btn_container.style.gridTemplateColumns = `repeat(${COLUMNS}, 1fr)`;
     btn_container.style.gridAutoRows = "70px";
 
     //Adding event functions
