@@ -1,4 +1,3 @@
-
 /*
     Generic utilities
 */
@@ -108,10 +107,17 @@ function path2DRectangle(framebuffer, ctx)
     reset_styles(ctx);
 }
 
+function multiColoredTriangle()
+{
+    //TODO
+}
+
 
 /*
     Building the drawing playground
 */
+
+require("./utils");
 
 const simulations = [
     { name: "Clear screen", proc: clean },
