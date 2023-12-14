@@ -1,5 +1,3 @@
-import * as utils from "./utils"
-
 /*
     Generic utilities
 */
@@ -109,12 +107,42 @@ function path2DRectangle(framebuffer, ctx)
     reset_styles(ctx);
 }
 
-function multiColoredTriangle()
+function triangleStack(framebuffer, ctx)
 {
-    const triangle_mesh = new Path2D();
-    const top_triangle = EquilateralTriangle(Vertex(framebuffer.width / 2, framebuffer.height / 4), 25);
+    clean(framebuffer, ctx);
+    const triangles = [
+        new EquilateralTriangle(new Vertex(framebuffer.width / 2, framebuffer.height / 4), 50)
+    ];
+    const draw_buf = new Path2D();
 
-    //TODO: Continue...
+    //Collect triangles to draw
+    const deepness_level = 9;
+    for(let i = 1, triangles_per_level = 1, arr_index = 0; i < deepness_level; i++, triangles_per_level++)
+    {
+        for(let j = 0; j < triangles_per_level; j++, arr_index++)
+        {
+            if(j == 0)
+            {
+                triangles.push(triangles[arr_index].getDownRightOffset());
+                continue;
+                arr_index += triangles_per_level; //TODO: DEBUG this
+            }
+            triangles.push(triangles[arr_index].getRightOffset());
+        }
+    }
+
+    //Draw the triangles
+    ctx.fillStyle = `rgb(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100})`;
+    for(let tr of triangles)
+    {
+        let vertices = tr.getVertices();
+        draw_buf.moveTo(vertices[0].x, vertices[0].y);
+        draw_buf.lineTo(vertices[1].x, vertices[1].y);
+        draw_buf.lineTo(vertices[2].x, vertices[2].y);
+        draw_buf.closePath();
+    }
+    ctx.fill(draw_buf);
+    reset_styles(ctx);
 }
 
 
@@ -128,7 +156,8 @@ const simulations = [
     { name: "Draw smiley face", proc: smile_face }, 
     { name: "Bezier curve", proc: bezier_curve }, 
     { name: "Plot twist", proc: plot_twist }, 
-    { name: "Centered rectangle", proc: path2DRectangle}
+    { name: "Centered rectangle", proc: path2DRectangle}, 
+    { name: "Stack of triangles", proc: triangleStack }
 ];
 
 addEventListener("DOMContentLoaded", () => {

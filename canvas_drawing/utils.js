@@ -11,9 +11,9 @@ class Vertex {
 }
 
 class EquilateralTriangle {
-    #v_top = Vertex(0,0);
-    #v_left = Vertex(0,0);
-    #v_right = Vertex(0,0);
+    #v_top = new Vertex(0,0);
+    #v_left = new Vertex(0,0);
+    #v_right = new Vertex(0,0);
     #side_length = 0;
     #height = 0;
 
@@ -25,8 +25,8 @@ class EquilateralTriangle {
         this.#height = (Math.sqrt(3) / 2) * side_length;
 
         let half_side_len = this.#side_length / 2;
-        this.#v_left = Vertex(this.#v_top.x - half_side_len, this.#v_top.y + this.#height);
-        this.#v_right = Vertex(this.#v_top.x + half_side_len, this.#v_top.y + this.#height)
+        this.#v_left = new Vertex(this.#v_top.x - half_side_len, this.#v_top.y + this.#height);
+        this.#v_right = new Vertex(this.#v_top.x + half_side_len, this.#v_top.y + this.#height)
     }
 
     /*
@@ -34,7 +34,7 @@ class EquilateralTriangle {
     */
     getVertices()
     {
-        return [Vertex(this.#v_top), Vertex(this.#v_left), Vertex(this.#v_right)];
+        return [this.#v_top, this.#v_left, this.#v_right];
     }
 
     /*
@@ -43,7 +43,7 @@ class EquilateralTriangle {
     */
     getDownLeftOffset()
     {
-        return EquilateralTriangle(this.#v_left, this.#side_length);
+        return new EquilateralTriangle(this.#v_left, this.#side_length);
     }
 
     /*
@@ -52,7 +52,7 @@ class EquilateralTriangle {
     */
     getDownRightOffset()
     {
-        return EquilateralTriangle(this.#v_right, this.#side_length);
+        return new EquilateralTriangle(this.#v_right, this.#side_length);
     }
 
     /*
@@ -60,7 +60,7 @@ class EquilateralTriangle {
     */
     getLeftOffset()
     {
-        return EquilateralTriangle(Vertex(this.#v_top.x - this.#side_length, this.#v_top.y), this.#side_length);
+        return new EquilateralTriangle(new Vertex(this.#v_top.x - this.#side_length, this.#v_top.y), this.#side_length);
     }
 
     /*
@@ -68,6 +68,6 @@ class EquilateralTriangle {
     */
     getRightOffset()
     {
-        return EquilateralTriangle(Vertex(this.#v_top.x + this.#side_length, this.#v_top.y), this.#side_length);
+        return new EquilateralTriangle(new Vertex(this.#v_top.x + this.#side_length, this.#v_top.y), this.#side_length);
     }
 }
