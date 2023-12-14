@@ -1,3 +1,5 @@
+import * as utils from "./utils"
+
 /*
     Generic utilities
 */
@@ -109,15 +111,16 @@ function path2DRectangle(framebuffer, ctx)
 
 function multiColoredTriangle()
 {
-    //TODO
+    const triangle_mesh = new Path2D();
+    const top_triangle = EquilateralTriangle(Vertex(framebuffer.width / 2, framebuffer.height / 4), 25);
+
+    //TODO: Continue...
 }
 
 
 /*
     Building the drawing playground
 */
-
-require("./utils");
 
 const simulations = [
     { name: "Clear screen", proc: clean },
