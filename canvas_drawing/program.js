@@ -111,22 +111,20 @@ function triangleStack(framebuffer, ctx)
 {
     clean(framebuffer, ctx);
     const triangles = [
-        new EquilateralTriangle(new Vertex(framebuffer.width / 2, framebuffer.height / 4), 50)
+        new EquilateralTriangle(new Vertex(framebuffer.width / 2, framebuffer.height / 4), 30)
     ];
     const draw_buf = new Path2D();
 
     //Collect triangles to draw
-    const deepness_level = 9;
+    const deepness_level = 15;
+    let left_pivot_triangle = triangles[0];
     for(let i = 1, triangles_per_level = 1, arr_index = 0; i < deepness_level; i++, triangles_per_level++)
     {
+        left_pivot_triangle = left_pivot_triangle.getDownLeftOffset();
+        triangles.push(left_pivot_triangle);
+        arr_index++;
         for(let j = 0; j < triangles_per_level; j++, arr_index++)
         {
-            if(j == 0)
-            {
-                triangles.push(triangles[arr_index].getDownRightOffset());
-                continue;
-                arr_index += triangles_per_level; //TODO: DEBUG this
-            }
             triangles.push(triangles[arr_index].getRightOffset());
         }
     }
