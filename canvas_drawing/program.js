@@ -107,13 +107,12 @@ function path2DRectangle(framebuffer, ctx)
     reset_styles(ctx);
 }
 
-function triangleStack(framebuffer, ctx)
+function multicoloredTriangles(framebuffer, ctx)
 {
     clean(framebuffer, ctx);
     const triangles = [
         new EquilateralTriangle(new Vertex(framebuffer.width / 2, framebuffer.height / 4), 30)
     ];
-    const draw_buf = new Path2D();
 
     //Collect triangles to draw
     const deepness_level = 15;
@@ -129,17 +128,19 @@ function triangleStack(framebuffer, ctx)
         }
     }
 
+    //I could use a Path2D object but it can't change each triangle's specific color
     //Draw the triangles
-    ctx.fillStyle = `rgb(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100})`;
     for(let tr of triangles)
     {
+        ctx.fillStyle = `rgb(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100})`;
+        ctx.beginPath();
         let vertices = tr.getVertices();
-        draw_buf.moveTo(vertices[0].x, vertices[0].y);
-        draw_buf.lineTo(vertices[1].x, vertices[1].y);
-        draw_buf.lineTo(vertices[2].x, vertices[2].y);
-        draw_buf.closePath();
+        ctx.moveTo(vertices[0].x, vertices[0].y);
+        ctx.lineTo(vertices[1].x, vertices[1].y);
+        ctx.lineTo(vertices[2].x, vertices[2].y);
+        ctx.closePath();
+        ctx.fill();
     }
-    ctx.fill(draw_buf);
     reset_styles(ctx);
 }
 
@@ -155,7 +156,7 @@ const simulations = [
     { name: "Bezier curve", proc: bezier_curve }, 
     { name: "Plot twist", proc: plot_twist }, 
     { name: "Centered rectangle", proc: path2DRectangle}, 
-    { name: "Stack of triangles", proc: triangleStack }
+    { name: "Random color triangles", proc: multicoloredTriangles }
 ];
 
 addEventListener("DOMContentLoaded", () => {
