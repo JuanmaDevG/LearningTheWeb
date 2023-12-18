@@ -1,4 +1,3 @@
-
 /*
     Generic utilities
 */
@@ -6,6 +5,14 @@
 function clean(framebuffer, ctx)
 {
     ctx.clearRect(0, 0, framebuffer.width, framebuffer.height);
+}
+
+function reset_styles(ctx)
+{
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 1;
 }
 
 
@@ -28,9 +35,113 @@ function red_triangle(framebuffer, ctx)
 function smile_face(framebuffer, ctx)
 {
     clean(framebuffer, ctx);
-    //TODO: draw the face
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, framebuffer.width, framebuffer.height);
+
+    circle = {
+        x: framebuffer.width / 2,
+        y: framebuffer.height / 2, 
+        radius: framebuffer.height / 4,  
+        start_angle: 0, 
+        fin_angle: 2 * Math.PI
+    };
+
+    //You can move the draw pointer like this or to make a lot of draw calls with [beginPath -> draw -> fill/stroke -> loop]
+
+    ctx.beginPath();
+    //Face
+    ctx.arc(circle.x, circle.y, circle.radius, circle.start_angle, circle.fin_angle);
+    //Left eye
+    ctx.moveTo(circle.x - (circle.radius / 2) + (circle.radius / 10), circle.y - (circle.radius / 2));
+    ctx.arc(circle.x - (circle.radius / 2), circle.y - (circle.radius / 2), circle.radius / 10, circle.start_angle, circle.fin_angle);
+    //Right eye
+    ctx.moveTo(circle.x + (circle.radius / 2) + (circle.radius / 10), circle.y - (circle.radius / 2));
+    ctx.arc(circle.x + (circle.radius / 2), circle.y - (circle.radius / 2), circle.radius / 10, circle.start_angle, circle.fin_angle);
+    //Mouth
+    ctx.moveTo(circle.x + (circle.radius * 0.6), circle.y);
+    ctx.arc(circle.x, circle.y, circle.radius * 0.6, circle.start_angle, circle.fin_angle / 2);
+    ctx.closePath();
+    ctx.stroke();
+}
+
+function bezier_curve(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+
+    ctx.strokeStyle = "blue";
+    ctx.beginPath();
+    ctx.moveTo(0, framebuffer.height / 2);
+    ctx.bezierCurveTo(
+        framebuffer.width / 4, framebuffer.height / 8, 
+        3 * (framebuffer.width / 4), 7 * (framebuffer.height / 8), 
+        framebuffer.width, framebuffer.height / 2
+    );
+    ctx.stroke();
+    reset_styles(ctx);
+}
+
+function plot_twist(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+    
+    ctx.beginPath();
+    ctx.moveTo(75 * 6, 25 * 6);
+    ctx.quadraticCurveTo(25 * 6, 25 *  6, 25 * 6, 62.5 *6);
+    ctx.quadraticCurveTo(25 * 6, 100 * 6, 50 * 6, 100 * 6);
+    ctx.quadraticCurveTo(50 * 6, 120 * 6, 30 * 6, 125 * 6);
+    ctx.quadraticCurveTo(60 * 6, 120 * 6, 65 * 6, 100 * 6);
+    ctx.quadraticCurveTo(125 * 6, 100 *6, 125 *6, 62.5 *6);
+    ctx.quadraticCurveTo(125 * 6, 25 * 6, 75 * 6, 25 *  6);
+    ctx.stroke();
+}
+
+//Storing graphics into a Path2D object is better for performance
+function path2DRectangle(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+    const draw_buf = new Path2D();
+
+    const px = framebuffer.width / 4, py = framebuffer.height / 4;
+    draw_buf.rect(px, py, px * 2, py * 2);
+
+    ctx.fillStyle = "rgb(120, 20, 80)";
+    ctx.fill(draw_buf);
+    reset_styles(ctx);
+}
+
+function multicoloredTriangles(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+    const triangles = [
+        new EquilateralTriangle(new Vertex(framebuffer.width / 2, framebuffer.height / 4), 30)
+    ];
+
+    //Collect triangles to draw
+    const deepness_level = 15;
+    let left_pivot_triangle = triangles[0];
+    for(let i = 1, triangles_per_level = 1, arr_index = 0; i < deepness_level; i++, triangles_per_level++)
+    {
+        left_pivot_triangle = left_pivot_triangle.getDownLeftOffset();
+        triangles.push(left_pivot_triangle);
+        arr_index++;
+        for(let j = 0; j < triangles_per_level; j++, arr_index++)
+        {
+            triangles.push(triangles[arr_index].getRightOffset());
+        }
+    }
+
+    //I could use a Path2D object but it can't change each triangle's specific color
+    //Draw the triangles
+    for(let tr of triangles)
+    {
+        ctx.fillStyle = `rgb(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100})`;
+        ctx.beginPath();
+        let vertices = tr.getVertices();
+        ctx.moveTo(vertices[0].x, vertices[0].y);
+        ctx.lineTo(vertices[1].x, vertices[1].y);
+        ctx.lineTo(vertices[2].x, vertices[2].y);
+        ctx.closePath();
+        ctx.fill();
+    }
+    reset_styles(ctx);
 }
 
 
@@ -41,7 +152,11 @@ function smile_face(framebuffer, ctx)
 const simulations = [
     { name: "Clear screen", proc: clean },
     { name: "Draw red triangle", proc: red_triangle}, 
-    { name: "Draw smiley face", proc: smile_face }
+    { name: "Draw smiley face", proc: smile_face }, 
+    { name: "Bezier curve", proc: bezier_curve }, 
+    { name: "Plot twist", proc: plot_twist }, 
+    { name: "Centered rectangle", proc: path2DRectangle}, 
+    { name: "Random color triangles", proc: multicoloredTriangles }
 ];
 
 addEventListener("DOMContentLoaded", () => {
@@ -51,9 +166,9 @@ addEventListener("DOMContentLoaded", () => {
     framebuffer.height = window.innerHeight;
 
     //Configuring grid
-    const ROWS = 4;
+    const COLUMNS = 4;
     let btn_container = document.getElementById("simulation-button-container");
-    btn_container.style.gridTemplateColumns = `repeat(${ROWS}, 1fr)`;
+    btn_container.style.gridTemplateColumns = `repeat(${COLUMNS}, 1fr)`;
     btn_container.style.gridAutoRows = "70px";
 
     //Adding event functions
