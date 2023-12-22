@@ -132,7 +132,7 @@ function multicoloredTriangles(framebuffer, ctx)
     //Draw the triangles
     for(let tr of triangles)
     {
-        ctx.fillStyle = `rgb(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100})`;
+        ctx.fillStyle = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
         ctx.beginPath();
         let vertices = tr.getVertices();
         ctx.moveTo(vertices[0].x, vertices[0].y);
@@ -141,6 +141,70 @@ function multicoloredTriangles(framebuffer, ctx)
         ctx.closePath();
         ctx.fill();
     }
+    reset_styles(ctx);
+}
+
+function gradientTriangleGrid(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+    const 
+        grill = { width: 20, height: 20 }, 
+        drawing = new Path2D(), 
+        start_point = { x: (framebuffer.width / 2) - (framebuffer.width / 5), y: framebuffer.height / 4}, 
+        triangle_side_length = 25, 
+        gradient = ctx.createLinearGradient(
+            start_point.x, start_point.y, 
+            start_point.x + (triangle_side_length * grill.height), start_point.y + (triangle_side_length * grill.height)
+        );
+    let pivot_triangle = new EquilateralTriangle(
+        new Vertex(start_point.x + (triangle_side_length / 2), start_point.y), triangle_side_length
+    );
+
+    for(let i=1; i <= grill.height; i++)
+    {
+        let evenRow = i % 2 == 0, actual_triangle = pivot_triangle;
+        gradient.addColorStop((1 / grill.height) * i, `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`);
+
+        for(let j=1; j <= (evenRow ? grill.width -1 : grill.width); j++)
+        {
+            actual_triangle.draw(drawing);
+            actual_triangle = actual_triangle.getRightOffset();
+        }
+
+        if(evenRow) {
+            pivot_triangle = pivot_triangle.getDownLeftOffset();
+        }
+        else {
+            pivot_triangle = pivot_triangle.getDownRightOffset();
+        }
+    }
+    ctx.fillStyle = gradient;
+    ctx.fill(drawing);
+    reset_styles();
+}
+
+/*
+    The context functions save() and restore() do not save an entire frame, it refers to 
+*/
+function saveRestoreState(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+    
+    //Saving styles
+    ctx.fillStyle = "red";
+    ctx.font = "15px serif";
+    ctx.save();
+    ctx.fillStyle = "blue";
+
+    //Will draw blue 
+    ctx.fillText("Blue fillstyle state", framebuffer.width / 4, (framebuffer.height / 6) - 15);
+    ctx.fillRect(framebuffer.width / 4, framebuffer.height / 6, 150, 150);
+    
+    //Will draw red (unstack red fill state)
+    ctx.restore();
+    ctx.fillText("Red fillstyle state", framebuffer.width / 2, (framebuffer.height  / 2) - 15);
+    ctx.fillRect(framebuffer.width / 2, framebuffer.height / 2, 50, 50);
+
     reset_styles(ctx);
 }
 
@@ -156,7 +220,9 @@ const simulations = [
     { name: "Bezier curve", proc: bezier_curve }, 
     { name: "Plot twist", proc: plot_twist }, 
     { name: "Centered rectangle", proc: path2DRectangle}, 
-    { name: "Random color triangles", proc: multicoloredTriangles }
+    { name: "Random color triangles", proc: multicoloredTriangles }, 
+    { name: "Gradient tr grid", proc: gradientTriangleGrid }, 
+    { name: "Save and restore state", proc: saveRestoreState}
 ];
 
 addEventListener("DOMContentLoaded", () => {

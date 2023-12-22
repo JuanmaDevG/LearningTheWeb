@@ -70,4 +70,12 @@ class EquilateralTriangle {
     {
         return new EquilateralTriangle(new Vertex(this.#v_top.x + this.#side_length, this.#v_top.y), this.#side_length);
     }
+
+    draw(ctx)
+    {
+        ctx.moveTo(this.#v_top.x, this.#v_top.y);
+        ctx.lineTo(this.#v_right.x, this.#v_right.y);
+        ctx.lineTo(this.#v_left.x, this.#v_left.y);
+        ctx.closePath();
+    }
 }
