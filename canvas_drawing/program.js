@@ -30,6 +30,8 @@ function red_triangle(framebuffer, ctx)
     ctx.lineTo(framebuffer.width / 3, (framebuffer.height / 3) * 2);
     ctx.closePath();
     ctx.fill();
+
+    reset_styles(ctx);
 }
 
 function smile_face(framebuffer, ctx)
@@ -60,6 +62,8 @@ function smile_face(framebuffer, ctx)
     ctx.arc(circle.x, circle.y, circle.radius * 0.6, circle.start_angle, circle.fin_angle / 2);
     ctx.closePath();
     ctx.stroke();
+
+    reset_styles(ctx);
 }
 
 function bezier_curve(framebuffer, ctx)
@@ -91,6 +95,7 @@ function plot_twist(framebuffer, ctx)
     ctx.quadraticCurveTo(125 * 6, 100 *6, 125 *6, 62.5 *6);
     ctx.quadraticCurveTo(125 * 6, 25 * 6, 75 * 6, 25 *  6);
     ctx.stroke();
+    reset_styles(ctx);
 }
 
 //Storing graphics into a Path2D object is better for performance
@@ -180,7 +185,7 @@ function gradientTriangleGrid(framebuffer, ctx)
     }
     ctx.fillStyle = gradient;
     ctx.fill(drawing);
-    reset_styles();
+    reset_styles(ctx);
 }
 
 /*
@@ -189,7 +194,7 @@ function gradientTriangleGrid(framebuffer, ctx)
 function saveRestoreState(framebuffer, ctx)
 {
     clean(framebuffer, ctx);
-    
+
     //Saving styles
     ctx.fillStyle = "red";
     ctx.font = "15px serif";
@@ -208,6 +213,47 @@ function saveRestoreState(framebuffer, ctx)
     reset_styles(ctx);
 }
 
+/* 
+    Moral of this drawing headacke:
+
+    When drawing a totally new figure after cleaning up the screen, 
+    NEVER, EVER, EVER, EVER forget to beginPath() to make sure that the last 
+    drawn object will not overlap with the new object.
+*/
+function rotatedTriangle(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+    const triangle = new EquilateralTriangle(new Vertex(0, 0), 100);
+    const w = framebuffer.width / 2, h = framebuffer.height / 2;
+    
+    ctx.save();
+    ctx.fillStyle = "blue";
+    ctx.translate(w, h);
+    ctx.rotate(Math.PI / 8);
+    ctx.scale(2, 2);
+    triangle.draw(ctx);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = "orange";
+    ctx.translate(500, 100);
+    ctx.rotate(Math.PI /2);
+    triangle.draw(ctx);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = "red";
+    ctx.translate((framebuffer.width / 3) * 2, (framebuffer.height / 3) * 2);
+    ctx.rotate((Math.PI / 8) * 7);
+    triangle.draw(ctx);
+    ctx.fill();
+    ctx.restore();
+
+    
+}
+
 
 /*
     Building the drawing playground
@@ -222,7 +268,8 @@ const simulations = [
     { name: "Centered rectangle", proc: path2DRectangle}, 
     { name: "Random color triangles", proc: multicoloredTriangles }, 
     { name: "Gradient tr grid", proc: gradientTriangleGrid }, 
-    { name: "Save and restore state", proc: saveRestoreState}
+    { name: "Save and restore state", proc: saveRestoreState}, 
+    { name: "Static translations", proc: rotatedTriangle}
 ];
 
 addEventListener("DOMContentLoaded", () => {

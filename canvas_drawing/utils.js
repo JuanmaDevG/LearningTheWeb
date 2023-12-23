@@ -73,6 +73,11 @@ class EquilateralTriangle {
 
     draw(ctx)
     {
+        //TODO: Make sure instance of context
+        if(ctx instanceof CanvasRenderingContext2D)
+        {
+            ctx.beginPath();
+        }
         ctx.moveTo(this.#v_top.x, this.#v_top.y);
         ctx.lineTo(this.#v_right.x, this.#v_right.y);
         ctx.lineTo(this.#v_left.x, this.#v_left.y);
