@@ -1,0 +1,8 @@
+body, html, div {
+    margin: 0px;
+    padding: 0px;
+}
+
+.newFont {
+    font-family: Arial, Helvetica, sans-serif;
+}
