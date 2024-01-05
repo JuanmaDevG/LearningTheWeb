@@ -250,8 +250,23 @@ function rotatedTriangle(framebuffer, ctx)
     triangle.draw(ctx);
     ctx.fill();
     ctx.restore();
+}
 
-    
+/*
+    To make animations:
+    - Clear Rectangle
+    - Save canvas state
+    - Draw
+    - Restore canvas state
+    - Loop
+
+    This example uses setTimeout() and clearTimeout() with timeoutId function logic
+*/
+function fireworks(framebuffer, ctx)
+{
+    clean(framebuffer, ctx);
+
+    ctx.restore();
 }
 
 
@@ -269,7 +284,8 @@ const simulations = [
     { name: "Random color triangles", proc: multicoloredTriangles }, 
     { name: "Gradient tr grid", proc: gradientTriangleGrid }, 
     { name: "Save and restore state", proc: saveRestoreState}, 
-    { name: "Static translations", proc: rotatedTriangle}
+    { name: "Static translations", proc: rotatedTriangle}, 
+    { name: "Fireworks", proc: fireworks}
 ];
 
 addEventListener("DOMContentLoaded", () => {

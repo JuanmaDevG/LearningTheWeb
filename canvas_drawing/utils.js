@@ -73,7 +73,6 @@ class EquilateralTriangle {
 
     draw(ctx)
     {
-        //TODO: Make sure instance of context
         if(ctx instanceof CanvasRenderingContext2D)
         {
             ctx.beginPath();
@@ -82,5 +81,27 @@ class EquilateralTriangle {
         ctx.lineTo(this.#v_right.x, this.#v_right.y);
         ctx.lineTo(this.#v_left.x, this.#v_left.y);
         ctx.closePath();
+    }
+}
+
+class Firework {
+    static DECELERATION = 0.3;
+    static FRAME_TIME = 10;         //In milliSeconds
+
+    #x = 0;
+    #y = 0;
+    #speed = 0;         //When is <= than 0, explodes
+
+    constructor(framebuffer)
+    {
+        this.#y = framebuffer.height;
+        let spawn_range = framebuffer.width / 3;
+        this.#x = spawn_range + (Math.random() * spawn_range);
+        this.#speed = Math.random() * 5;
+    }
+
+    fire(ctx)
+    {
+        //TODO: figure out the fire animation and the variables for the logic
     }
 }
