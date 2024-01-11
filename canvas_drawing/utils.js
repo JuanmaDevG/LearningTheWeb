@@ -86,7 +86,7 @@ class EquilateralTriangle {
 
 class Firework {
     static DECELERATION = 0.3;
-    static FRAME_TIME = 10;         //In milliSeconds
+    static FRAME_TIME = 17;         //In milliSeconds
 
     #x = 0;
     #y = 0;
@@ -94,8 +94,9 @@ class Firework {
 
     constructor(framebuffer)
     {
-        this.#y = framebuffer.height;
         let spawn_range = framebuffer.width / 3;
+
+        this.#y = framebuffer.height;
         this.#x = spawn_range + (Math.random() * spawn_range);
         this.#speed = Math.random() * 5;
     }
